@@ -10,11 +10,14 @@ import 'package:flutter_sixvalley_ecommerce/common/basewidget/animated_custom_di
 import 'package:flutter_sixvalley_ecommerce/features/checkout/widgets/order_place_dialog_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/dashboard/screens/dashboard_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_sixvalley_ecommerce/common/basewidget/show_custom_snakbar_widget.dart';
 
 class DigitalPaymentScreen extends StatefulWidget {
-  final String url;
+  final String? url;
   final bool fromWallet;
-  const DigitalPaymentScreen({super.key, required this.url,  this.fromWallet = false});
+  final Function(bool)? onPaymentComplete;
+  const DigitalPaymentScreen({super.key, required this.url, this.fromWallet = false, this.onPaymentComplete});
 
   @override
   DigitalPaymentScreenState createState() => DigitalPaymentScreenState();
@@ -33,11 +36,37 @@ class DigitalPaymentScreenState extends State<DigitalPaymentScreen> {
   void initState() {
     super.initState();
     selectedUrl = widget.url;
+    if (selectedUrl == null || selectedUrl!.isEmpty) {
+      // Handle invalid URL case
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+        showCustomSnackBar('Invalid payment URL', context);
+      });
+      return;
+    }
     _initData();
   }
 
   void _initData() async {
-    browser = MyInAppBrowser(context);
+    // Check if the URL is a UPI payment URL
+    if (selectedUrl?.contains('upi://') == true || selectedUrl?.contains('intent://') == true) {
+      // Launch UPI URL in external browser/app
+      if (await canLaunchUrl(Uri.parse(selectedUrl!))) {
+        await launchUrl(Uri.parse(selectedUrl!), mode: LaunchMode.externalApplication);
+        // Show payment status dialog
+        showAnimatedDialog(context, OrderPlaceDialogWidget(
+          icon: Icons.info,
+          title: getTranslated('payment_initiated', context),
+          description: getTranslated('please_complete_payment_in_upi_app', context),
+        ), dismissible: false, willFlip: true);
+      } else {
+        showCustomSnackBar('${getTranslated('could_not_launch_payment', context)}', context);
+      }
+      return;
+    }
+
+    // For non-UPI payments, use in-app browser
+    browser = MyInAppBrowser(context, onPaymentComplete: widget.onPaymentComplete);
     if(Platform.isAndroid){
       await InAppWebViewController.setWebContentsDebuggingEnabled(true);
       bool swAvailable = await WebViewFeature.isFeatureSupported(WebViewFeature.SERVICE_WORKER_BASIC_USAGE);
@@ -55,14 +84,11 @@ class DigitalPaymentScreenState extends State<DigitalPaymentScreen> {
       }
     }
     await browser.openUrlRequest(
-        urlRequest: URLRequest(url: WebUri(selectedUrl??'')),
+        urlRequest: URLRequest(url: WebUri(selectedUrl ?? '')),
         settings: InAppBrowserClassSettings(
             webViewSettings: InAppWebViewSettings(useShouldOverrideUrlLoading: true, useOnLoadResource: true),
             browserSettings: InAppBrowserSettings(hideUrlBar: true, hideToolbarTop: Platform.isAndroid)));
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +98,6 @@ class DigitalPaymentScreenState extends State<DigitalPaymentScreen> {
         appBar: AppBar(title: const Text(''),backgroundColor: Theme.of(context).cardColor),
         body: Column(crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,children: [
-
             _isLoading ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))) : const SizedBox.shrink()])),
     );
   }
@@ -94,15 +119,15 @@ class DigitalPaymentScreenState extends State<DigitalPaymentScreen> {
   }
 }
 
-
-
 class MyInAppBrowser extends InAppBrowser {
 
   final BuildContext context;
+  final Function(bool)? onPaymentComplete;
 
   MyInAppBrowser(this.context, {
     super.windowId,
     super.initialUserScripts,
+    this.onPaymentComplete,
   });
 
   bool _canRedirect = true;
@@ -155,8 +180,6 @@ class MyInAppBrowser extends InAppBrowser {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
           builder: (_) => const DashBoardScreen()), (route) => false);
 
-
-
       showAnimatedDialog(context, OrderPlaceDialogWidget(
         icon: Icons.clear,
         title: getTranslated('payment_failed', context),
@@ -203,48 +226,34 @@ class MyInAppBrowser extends InAppBrowser {
         close();
       }
       if(isSuccess){
-
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const DashBoardScreen()), (route) => false);
-
-
         showAnimatedDialog(context, OrderPlaceDialogWidget(
           icon: Icons.done,
           title: getTranslated('order_placed', context),
           description: getTranslated('your_order_placed', context),
         ), dismissible: false, willFlip: true);
-
-
-      }else if(isFailed) {
+        onPaymentComplete?.call(true);
+      } else if(isFailed) {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
             builder: (_) => const DashBoardScreen()), (route) => false);
-
-
-
         showAnimatedDialog(context, OrderPlaceDialogWidget(
           icon: Icons.clear,
           title: getTranslated('payment_failed', context),
           description: getTranslated('your_payment_failed', context),
           isFailed: true,
         ), dismissible: false, willFlip: true);
-
-
-      }else if(isCancel) {
+        onPaymentComplete?.call(false);
+      } else if(isCancel) {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
             builder: (_) => const DashBoardScreen()), (route) => false);
-
-
         showAnimatedDialog(context, OrderPlaceDialogWidget(
           icon: Icons.clear,
           title: getTranslated('payment_cancelled', context),
           description: getTranslated('your_payment_cancelled', context),
           isFailed: true,
         ), dismissible: false, willFlip: true);
-
+        onPaymentComplete?.call(false);
       }
     }
-
   }
-
-
-
 }

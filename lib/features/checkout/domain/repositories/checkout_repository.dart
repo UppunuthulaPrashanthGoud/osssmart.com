@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/dio/dio_client.dart';
@@ -82,35 +81,20 @@ class CheckoutRepository implements CheckoutRepositoryInterface{
   }
 
   @override
-  Future<ApiResponse> digitalPaymentPlaceOrder(
-      String? orderNote,
-      String? customerId,
-      String? addressId,
-      String? billingAddressId,
-      String? couponCode,
-      String? couponDiscount,
-      String? paymentMethod,
-      ) async {
-
-    try {
-      final response = await dioClient!.post(AppConstants.digitalPayment, data: {
-        "order_note": orderNote,
-        "customer_id":  customerId,
-        "address_id": addressId,
-        "billing_address_id": billingAddressId,
-        "coupon_code": couponCode,
-        "coupon_discount": couponDiscount,
-        "payment_platform" : "app",
-        "payment_method" : paymentMethod,
-        "callback" : null,
-        "payment_request_from" : "app",
-        'guest_id' : Provider.of<AuthController>(Get.context!, listen: false).getGuestToken(),
-        'is_guest': !Provider.of<AuthController>(Get.context!, listen: false).isLoggedIn(),
-      });
-      return ApiResponse.withSuccess(response);
-    } catch (e) {
-      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
-    }
+  Future<dynamic> digitalPaymentPlaceOrder(String? orderNote, String? customerId, String? addressId, String? billingAddressId, String? couponCode, String? couponDiscount, String? paymentMethod, {String? receiptId}) async {
+    return await dioClient!.post(
+      AppConstants.digitalPayment,
+      data: {
+        'order_note': orderNote,
+        'customer_id': customerId,
+        'address_id': addressId,
+        'billing_address_id': billingAddressId,
+        'coupon_code': couponCode,
+        'coupon_discount': couponDiscount,
+        'payment_method': paymentMethod,
+        'receipt_id': receiptId,
+      },
+    );
   }
 
   @override
@@ -141,5 +125,22 @@ class CheckoutRepository implements CheckoutRepositoryInterface{
   Future update(Map<String, dynamic> body, int id) {
     // TODO: implement update
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse> verifyRazorpayPayment({required String paymentId, required String orderId, required String signature}) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.digitalPayment}/verify',
+        data: {
+          'payment_id': paymentId,
+          'order_id': orderId,
+          'signature': signature,
+        },
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
   }
 }

@@ -686,5 +686,8 @@
   "medium": "Medium",
   "low": "Low",
   "select_payment_method": "اختار طريقة الدفع",
-  "otp_resent_successfully": "تمت إعادة إرسال OTP بنجاح"
+  "otp_resent_successfully": "تمت إعادة إرسال OTP بنجاح",
+  "payment_initiated": "تم بدء الدفع",
+  "please_complete_payment_in_upi_app": "يرجى إكمال الدفع في تطبيق UPI الخاص بك",
+  "could_not_launch_payment": "تعذر تشغيل تطبيق الدفع"
 }

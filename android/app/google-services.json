@@ -18,11 +18,11 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.osssmart.prms",
-            "certificate_hash": "0f4314ba6debe3b65ff3723f0b7944fd74e02610"
+            "certificate_hash": "ecb445b69854d08a9e1d37d4cd352ee2bbeb050d"
           }
         },
         {
-          "client_id": "728485568132-d94rrv7c7o6apni4p0mruttc40dpkrb0.apps.googleusercontent.com",
+          "client_id": "728485568132-r5lo5lpbd1jkif80mounsno9rcuu80c5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

@@ -690,5 +690,8 @@
   "medium": "Medium",
   "low": "Low",
   "select_payment_method": "Selecciona el método de pago",
-  "otp_resent_successfully": "OTP reenviada exitosamente"
+  "otp_resent_successfully": "OTP reenviada exitosamente",
+  "payment_initiated": "Pago iniciado",
+  "please_complete_payment_in_upi_app": "Por favor complete el pago en su aplicación UPI",
+  "could_not_launch_payment": "No se pudo iniciar la aplicación de pago"
 }

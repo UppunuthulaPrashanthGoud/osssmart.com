@@ -308,7 +308,10 @@ Future<void> init() async {
 
   CheckoutRepositoryInterface checkoutRepositoryInterface = CheckoutRepository(dioClient: sl());
   sl.registerLazySingleton(() => checkoutRepositoryInterface);
-  CheckoutServiceInterface checkoutServiceInterface = CheckoutService(checkoutRepositoryInterface: sl());
+  CheckoutServiceInterface checkoutServiceInterface = CheckoutService(
+    checkoutRepositoryInterface: sl(),
+    dioClient: sl(),
+  );
   sl.registerLazySingleton(() => checkoutServiceInterface);
 
   CompareRepositoryInterface compareRepositoryInterface = CompareRepository(dioClient: sl());
@@ -446,7 +449,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CategoryService(categoryRepoInterface : sl()));
   sl.registerLazySingleton(() => ChatService(chatRepositoryInterface : sl()));
   sl.registerLazySingleton(() => ShippingService(shippingRepositoryInterface : sl()));
-  sl.registerLazySingleton(() => CheckoutService(checkoutRepositoryInterface : sl()));
+  sl.registerLazySingleton(() => CheckoutService(
+    checkoutRepositoryInterface: sl(),
+    dioClient: sl(),
+  ));
   sl.registerLazySingleton(() => CompareService(compareRepositoryInterface : sl()));
   sl.registerLazySingleton(() => ContactUsService(contactUsRepositoryInterface : sl()));
   sl.registerLazySingleton(() => CouponService(couponRepositoryInterface : sl()));

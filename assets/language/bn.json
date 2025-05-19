@@ -392,7 +392,7 @@
   "payment_note": "পেমেন্ট নোট",
   "offline_payment": "অফলাইন পেমেন্ট",
   "cancel": "ক্যানসেল",
-  "payment_by_is_required": "অর্থ পেমেন্টের মাধ্যম প্রয়োজন",
+  "payment_by_is_required": "অর্থ প্রদানের পদ্ধতিটি সঠিকভাবে কনফিগার করা হয়নি",
   "transaction_id_is_required": "ট্রান্সেকশন আইডি প্রয়োজন",
   "wallet_payment": "ওয়ালেট পেমেন্ট",
   "insufficient_balance": "অপর্যাপ্ত ব্যালেন্স",
@@ -690,5 +690,8 @@
   "medium": "Medium",
   "low": "Low",
   "select_payment_method": "অর্থপ্রদানের পদ্ধতি নির্বাচন করুন",
-  "otp_resent_successfully": "OTP সফলভাবে পুনরায় পাঠানো হয়েছে"
+  "otp_resent_successfully": "OTP সফলভাবে পুনরায় পাঠানো হয়েছে",
+  "payment_initiated": "পেমেন্ট শুরু করা হয়েছে",
+  "please_complete_payment_in_upi_app": "অনুগ্রহ করে আপনার UPI অ্যাপে পেমেন্ট সম্পূর্ণ করুন",
+  "could_not_launch_payment": "পেমেন্ট অ্যাপ চালু করতে পারেনি"
 }

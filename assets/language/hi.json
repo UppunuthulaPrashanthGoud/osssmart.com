@@ -503,5 +503,8 @@
   "medium": "Medium",
   "low": "Low",
   "select_payment_method": "भुगतान का तरीका चुनें",
-  "otp_resent_successfully": "ओटीपी सफलतापूर्वक पुनः भेजा गया"
+  "otp_resent_successfully": "ओटीपी सफलतापूर्वक पुनः भेजा गया",
+  "payment_initiated": "भुगतान शुरू किया गया",
+  "please_complete_payment_in_upi_app": "कृपया अपने UPI ऐप में भुगतान पूरा करें",
+  "could_not_launch_payment": "भुगतान ऐप नहीं खोल सके"
 }

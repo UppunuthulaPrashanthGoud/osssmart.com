@@ -28,6 +28,7 @@ import 'package:flutter_sixvalley_ecommerce/features/checkout/widgets/shipping_d
 import 'package:flutter_sixvalley_ecommerce/features/checkout/widgets/wallet_payment_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/dashboard/screens/dashboard_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<CartModel> cartList;
@@ -123,16 +124,32 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                   locationProvider.addressList![orderProvider.billingAddressIndex!].id.toString() : '';
 
                                   if(orderProvider.paymentMethodIndex != -1){
+                                    if(orderProvider.selectedDigitalPaymentMethodName.toLowerCase() == 'razor_pay') {
+                                      orderProvider.initiateRazorpayPayment(
+                                        orderNote: orderNote,
+                                        customerId: Provider.of<AuthController>(context, listen: false).isLoggedIn()?
+                                          profileProvider.userInfoModel?.id.toString() ?? '' : 
+                                          Provider.of<AuthController>(context, listen: false).getGuestToken() ?? '',
+                                        addressId: addressId,
+                                        billingAddressId: billingAddressId,
+                                        couponCode: couponCode,
+                                        couponDiscount: couponCodeAmount,
+                                        paymentMethod: orderProvider.selectedDigitalPaymentMethodName,
+                                        amount: _order + widget.shippingFee - widget.discount - _couponDiscount! + widget.tax,
+                                      );
+                                    } else {
                                     orderProvider.digitalPaymentPlaceOrder(
                                         orderNote: orderNote,
                                       customerId: Provider.of<AuthController>(context, listen: false).isLoggedIn()?
-                                      profileProvider.userInfoModel?.id.toString() : Provider.of<AuthController>(context, listen: false).getGuestToken(),
+                                          profileProvider.userInfoModel?.id.toString() ?? '' : 
+                                          Provider.of<AuthController>(context, listen: false).getGuestToken(),
                                       addressId: addressId,
                                       billingAddressId: billingAddressId,
                                       couponCode: couponCode,
                                       couponDiscount: couponCodeAmount,
-                                      paymentMethod: orderProvider.selectedDigitalPaymentMethodName);
-
+                                        paymentMethod: orderProvider.selectedDigitalPaymentMethodName
+                                      );
+                                    }
                                   }else if (orderProvider.codChecked && !widget.onlyDigital){
                                     orderProvider.placeOrder(callback: _callback,
                                         addressID : widget.onlyDigital ? '': addressId,

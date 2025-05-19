@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/features/cart/domain/services/cart_service_interface.dart';
 import 'package:flutter_sixvalley_ecommerce/data/model/api_response.dart';
@@ -123,7 +122,9 @@ class CartController extends ChangeNotifier {
 
   }
 
-
-
+  Future<void> clearCart() async {
+    _cartList = [];
+    notifyListeners();
+  }
 
 }

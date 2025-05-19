@@ -188,4 +188,6 @@ static const String otpVerificationForDigitalProduct = '/api/v1/customer/order/d
     LanguageModel(imageUrl: Images.bn, languageName: 'Bangla', countryCode: 'BD', languageCode: 'bn'),
     LanguageModel(imageUrl: Images.es, languageName: 'Spanish', countryCode: 'ES', languageCode: 'es'),
   ];
+
+  static const String razorpayKey = 'rzp_live_hXCdVzCEvg7j58';
 }

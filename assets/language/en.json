@@ -538,8 +538,8 @@
   "want_to_order_your_usuals_just_reorder_from_your_previous_orders": "Want to order your usuals? Just reorder from your previous orders.",
   "find_what_you_need": "Find what you need",
   "top_stores": "Top stores",
-  "dont_miss_the_chance": "Don’t Miss the Chance !",
-  "lets_shopping_today": "Let’s Shopping Today",
+  "dont_miss_the_chance": "Don't Miss the Chance !",
+  "lets_shopping_today": "Let's Shopping Today",
   "just_for_you": "Just for You",
   "more_store": "More Store",
   "flash_sale_fore_any_item": "Flash Sale for Any Item",
@@ -653,7 +653,7 @@
   "currently_no_offers_available": "Currently No Offers Available",
   "no_transaction_history": "No Transaction History",
   "no_order_found": "No Order Found",
-  "no_wishlist_product": "You haven’t add any product\nto wishlist",
+  "no_wishlist_product": "You haven't add any product\nto wishlist",
   "no_ticket_created": "No Ticket Created",
   "no_product_found": "No Product Found",
   "no_address_found": "No Address Found",
@@ -717,5 +717,8 @@
   "shop_close_message" : "Sorry ! Currently we are not available. But you can ask or still message us. We will get back to you soon. Thank you for your patience..",
   "same_as_delivery": "Same as Delivery",
   "refund_amount": "Refund Amount",
-  "price_range": "Price Range"
+  "price_range": "Price Range",
+  "payment_initiated": "Payment Initiated",
+  "please_complete_payment_in_upi_app": "Please complete the payment in your UPI app",
+  "could_not_launch_payment": "Could not launch payment app"
 }
